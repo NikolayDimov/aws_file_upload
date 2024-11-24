@@ -1,7 +1,20 @@
 {
   "version": "38.0.1",
   "files": {
-    "2246e290bc23035392c00dedbf4c75f1dd8d1b89ccbefc1f224914e11662ea6c": {
+    "d0da8716b3fdf7f5951030abdc9f39937a056685ce71a0f62f597d6c62f41e47": {
+      "source": {
+        "path": "asset.d0da8716b3fdf7f5951030abdc9f39937a056685ce71a0f62f597d6c62f41e47",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "d0da8716b3fdf7f5951030abdc9f39937a056685ce71a0f62f597d6c62f41e47.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "604e5cb12e79affd614fdbe74945e81d169f535667cf2a2bf3b152dccfa476b7": {
       "source": {
         "path": "AwsFileUploadStack.template.json",
         "packaging": "file"
@@ -9,7 +22,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "2246e290bc23035392c00dedbf4c75f1dd8d1b89ccbefc1f224914e11662ea6c.json",
+          "objectKey": "604e5cb12e79affd614fdbe74945e81d169f535667cf2a2bf3b152dccfa476b7.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

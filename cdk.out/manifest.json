@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/2246e290bc23035392c00dedbf4c75f1dd8d1b89ccbefc1f224914e11662ea6c.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/604e5cb12e79affd614fdbe74945e81d169f535667cf2a2bf3b152dccfa476b7.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -40,10 +40,28 @@
             "data": "FileUploadBucketAwsExamB432E057"
           }
         ],
-        "/AwsFileUploadStack/FileMetadataTable/Resource": [
+        "/AwsFileUploadStack/expirationTable/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "FileMetadataTableE69EBE66"
+            "data": "expirationTable8F1B41DE"
+          }
+        ],
+        "/AwsFileUploadStack/ProcessFileLambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessFileLambdaServiceRole13746D9D"
+          }
+        ],
+        "/AwsFileUploadStack/ProcessFileLambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessFileLambdaServiceRoleDefaultPolicy2E96B421"
+          }
+        ],
+        "/AwsFileUploadStack/ProcessFileLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProcessFileLambdaC1DE8C82"
           }
         ],
         "/AwsFileUploadStack/CDKMetadata/Default": [

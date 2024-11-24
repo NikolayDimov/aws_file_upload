@@ -8,7 +8,7 @@
     "aws:cdk:path": "AwsFileUploadStack/FileUploadBucketAwsExam/Resource"
    }
   },
-  "FileMetadataTableE69EBE66": {
+  "expirationTable8F1B41DE": {
    "Type": "AWS::DynamoDB::Table",
    "Properties": {
     "AttributeDefinitions": [
@@ -43,13 +43,170 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "AwsFileUploadStack/FileMetadataTable/Resource"
+    "aws:cdk:path": "AwsFileUploadStack/expirationTable/Resource"
+   }
+  },
+  "ProcessFileLambdaServiceRole13746D9D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessFileLambda/ServiceRole/Resource"
+   }
+  },
+  "ProcessFileLambdaServiceRoleDefaultPolicy2E96B421": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "FileUploadBucketAwsExamB432E057",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "FileUploadBucketAwsExamB432E057",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "expirationTable8F1B41DE",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ProcessFileLambdaServiceRoleDefaultPolicy2E96B421",
+    "Roles": [
+     {
+      "Ref": "ProcessFileLambdaServiceRole13746D9D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessFileLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "ProcessFileLambdaC1DE8C82": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "d0da8716b3fdf7f5951030abdc9f39937a056685ce71a0f62f597d6c62f41e47.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "expirationTable8F1B41DE"
+      },
+      "BUCKET_NAME": {
+       "Ref": "FileUploadBucketAwsExamB432E057"
+      }
+     }
+    },
+    "Handler": "index.processFileLambda",
+    "Role": {
+     "Fn::GetAtt": [
+      "ProcessFileLambdaServiceRole13746D9D",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x"
+   },
+   "DependsOn": [
+    "ProcessFileLambdaServiceRoleDefaultPolicy2E96B421",
+    "ProcessFileLambdaServiceRole13746D9D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessFileLambda/Resource",
+    "aws:asset:path": "asset.d0da8716b3fdf7f5951030abdc9f39937a056685ce71a0f62f597d6c62f41e47",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
    }
   },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/03JOw7CMBBF0bWktwdjCkRLdhDSI/+QJk7GUsYmQpb3jkgaqnf0robzVYHqzMbS+ShntFAf2bgozMbPyheo9+JiyKJ/0aEm/IfMkryFOho7h1/a0ZoYAqeyuv37d5/IY8ZETVDyASY+vbWGG6huYkS5Fsq4BBiO/QKjEuN2mAAAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zWOTQvCMAyGf4v3Ls55EI868CgyvY+s7ST7SGHpFCn777JWT88b8uYhBewOOeQbfEumTZ8N1EC4e9S9wrfUQfYQzrPurVdly7+UcEaxizIfxtGZBsIDm8GurRgWNeDYGKzZGdsJXCMuM2tPjhXhCKFy6SDy5gbSn3VMaVGyr1HEeoHTip8Qypb/mkVVVtw8aati5e7xSfyMzv+ibLl0bCj112+gk+2rKOAI+aYTomya2dNooUr8AqV0tS8UAQAA"
    },
    "Metadata": {
     "aws:cdk:path": "AwsFileUploadStack/CDKMetadata/Default"
