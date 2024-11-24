@@ -44,7 +44,7 @@ export const processFileLambda = async (event: any) => {
                 console.error(`Error deleting invalid file ${key}:`, deleteError);
             }
 
-            return { statusCode: 400, body: message }; // Return early for invalid files
+            return { statusCode: 400, body: message };
         }
 
         // Construct the PutItem parameters for DynamoDB
