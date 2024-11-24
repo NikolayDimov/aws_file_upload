@@ -37,6 +37,7 @@ export class AwsFileUploadStack extends cdk.Stack {
             environment: {
                 TABLE_NAME: expirationTable.tableName,
                 BUCKET_NAME: bucket.bucketName,
+                TOPIC_ARN: "arn:aws:sns:region:account-id:topic-name", // Replace with actual SNS Topic ARN
             },
         });
 
@@ -44,6 +45,28 @@ export class AwsFileUploadStack extends cdk.Stack {
         bucket.grantReadWrite(processFileLambda);
         expirationTable.grantReadWriteData(processFileLambda);
 
+        // Trigger Lambda on file upload
         bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3Notifications.LambdaDestination(processFileLambda));
+
+        // Scheduled Lambda for Cleanup
+        const cleanupLambda = new NodejsFunction(this, "CleanupLambda", {
+            runtime: Runtime.NODEJS_20_X,
+            handler: "cleanupFunction",
+            entry: `${__dirname}/../src/cleanupFunction.ts`,
+            environment: {
+                TABLE_NAME: expirationTable.tableName,
+                BUCKET_NAME: bucket.bucketName,
+            },
+        });
+
+        // Grant Permissions to Cleanup Lambda
+        bucket.grantReadWrite(cleanupLambda);
+        expirationTable.grantReadWriteData(cleanupLambda);
+
+        // Schedule Cleanup Lambda
+        new cdk.aws_events.Rule(this, "ScheduleCleanupRule", {
+            schedule: cdk.aws_events.Schedule.rate(cdk.Duration.minutes(5)),
+            targets: [new cdk.aws_events_targets.LambdaFunction(cleanupLambda)],
+        });
     }
 }

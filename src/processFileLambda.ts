@@ -1,21 +1,39 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb"; // Importing low-level DynamoDB client and command
+import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import * as AWS from "aws-sdk";
 
 const s3 = new AWS.S3();
 const dynamoClient = new DynamoDBClient({});
 
-const TABLE_NAME = process.env.TABLE_NAME;
+const TABLE_NAME = process.env.TABLE_NAME!;
+const TOPIC_ARN = process.env.TOPIC_ARN!;
+
+const allowedExtensions = ["pdf", "jpg", "png"];
 
 export const processFileLambda = async (event: any) => {
     for (const record of event.Records) {
         const bucket = record.s3.bucket.name;
         const key = record.s3.object.key;
         const size = record.s3.object.size;
+        const fileExtension = key.split(".").pop()?.toLowerCase();
+        const expirationTime = Math.floor(Date.now() / 1000) + 30 * 60; // TTL for 30 minutes
 
-        const expirationTime = Math.floor(Date.now() / 1000) + 30 * 60;
-        const fileExtension = key.split(".").pop();
+        // Validate file extension
+        if (!allowedExtensions.includes(fileExtension || "")) {
+            // Send SNS notification for invalid file type
+            const snsClient = new AWS.SNS();
+            const message = `Error: Invalid file extension for file ${key}. Allowed extensions are .pdf, .jpg, .png.`;
+            await snsClient
+                .publish({
+                    TopicArn: TOPIC_ARN,
+                    Message: message,
+                })
+                .promise();
 
-        // Construct the PutItem parameters for low-level API
+            console.log(message);
+            throw new Error(message); // Stop processing invalid files
+        }
+
+        // Construct the PutItem parameters for DynamoDB
         const putItemParams = {
             TableName: TABLE_NAME,
             Item: {
@@ -37,4 +55,9 @@ export const processFileLambda = async (event: any) => {
             console.error("Error storing metadata for", key, error);
         }
     }
+
+    return {
+        statusCode: 200,
+        body: "File processed successfully",
+    };
 };

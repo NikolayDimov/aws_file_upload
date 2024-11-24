@@ -233,7 +233,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "a471b1b38f0833ecc8f7c2f2bab6b2ea654ae2841a221848e97c9b9051e9bee0.zip"
+     "S3Key": "c95ba8997a41fe41cebe89bfaff7ae89484124fc0c90a30760bc8d00e51fc523.zip"
     },
     "Environment": {
      "Variables": {
@@ -242,7 +242,8 @@
       },
       "BUCKET_NAME": {
        "Ref": "FileUploadBucketAwsExamB432E057"
-      }
+      },
+      "TOPIC_ARN": "arn:aws:sns:region:account-id:topic-name"
      }
     },
     "Handler": "index.processFileLambda",
@@ -260,7 +261,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "AwsFileUploadStack/ProcessFileLambda/Resource",
-    "aws:asset:path": "asset.a471b1b38f0833ecc8f7c2f2bab6b2ea654ae2841a221848e97c9b9051e9bee0",
+    "aws:asset:path": "asset.c95ba8997a41fe41cebe89bfaff7ae89484124fc0c90a30760bc8d00e51fc523",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -348,10 +349,210 @@
     "aws:cdk:path": "AwsFileUploadStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource"
    }
   },
+  "CleanupLambdaServiceRole3E2B184D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/CleanupLambda/ServiceRole/Resource"
+   }
+  },
+  "CleanupLambdaServiceRoleDefaultPolicy30F00092": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "FileUploadBucketAwsExamB432E057",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "FileUploadBucketAwsExamB432E057",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "expirationTable8F1B41DE",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CleanupLambdaServiceRoleDefaultPolicy30F00092",
+    "Roles": [
+     {
+      "Ref": "CleanupLambdaServiceRole3E2B184D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/CleanupLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CleanupLambda82DB42D3": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "a1d5689cc514ac79cc3de6a9421fa76f335e64548ef66d6bf80e51ed9be1dafa.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "expirationTable8F1B41DE"
+      },
+      "BUCKET_NAME": {
+       "Ref": "FileUploadBucketAwsExamB432E057"
+      }
+     }
+    },
+    "Handler": "index.cleanupFunction",
+    "Role": {
+     "Fn::GetAtt": [
+      "CleanupLambdaServiceRole3E2B184D",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x"
+   },
+   "DependsOn": [
+    "CleanupLambdaServiceRoleDefaultPolicy30F00092",
+    "CleanupLambdaServiceRole3E2B184D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/CleanupLambda/Resource",
+    "aws:asset:path": "asset.a1d5689cc514ac79cc3de6a9421fa76f335e64548ef66d6bf80e51ed9be1dafa",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ScheduleCleanupRule0B345C0C": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "ScheduleExpression": "rate(5 minutes)",
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Fn::GetAtt": [
+        "CleanupLambda82DB42D3",
+        "Arn"
+       ]
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ScheduleCleanupRule/Resource"
+   }
+  },
+  "ScheduleCleanupRuleAllowEventRuleAwsFileUploadStackCleanupLambdaF32028A4EE845FE6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "CleanupLambda82DB42D3",
+      "Arn"
+     ]
+    },
+    "Principal": "events.amazonaws.com",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "ScheduleCleanupRule0B345C0C",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ScheduleCleanupRule/AllowEventRuleAwsFileUploadStackCleanupLambdaF32028A4"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OQY7CMAxFz8I+9ZSyQLOESixHCNhXbhKQ28aR6nQQinr3UZKB1XuW/5fdwHZfQ73Bp1TajNVEPcRrQD0qfEoXZQfxuOjRBtXe+d8Kjih2VRO63iDE9s5nOzsSIc8pe1pYB/K8KvNidN70EG/YTzYts7zLHXtjB4GfjHdPETqIF18KmWc/kX6lsdiqZNehiA0Ch4Q1R634ZdZWfSTvrgEfxI+UaD0bKr+l0zDI12/TwDfUm0GIqnnhQM7CpfAPZ+p1vSQBAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OTWvDMAxAf0vvjpalh7LjGthxlHT3oNhqUT5kiOyWYvLfi5N2p/eE9EAVfB5KKHd418K6oRi5g3QOaAeDd22T7iEdox0omPoiL9twRKXFjDh1DiHVFznRPLEqe8m3P1FsYC+LcQ/BybsO0h92I+XlKu+4Fe+oV/hd8e4M4wSp8Vuw8uRHto88brYY3beoSkHhO8PQjSQopCa+sjjSsqxG6uNsyfzLWpwDXlmu+aL24nj7OD8EvX7cqgq+oNz1ylzMUQJPBM3GJ2oXZjc6AQAA"
    },
    "Metadata": {
     "aws:cdk:path": "AwsFileUploadStack/CDKMetadata/Default"

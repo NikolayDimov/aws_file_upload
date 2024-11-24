@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/ae798e1b01a42498df32d87d9c53743301c06217f680ea3ca1b86166c96f18da.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c3442cd014815d960fa1ab34fe77c9f26251a3452d0c7b526b4a95fc32f5bd7e.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -92,6 +92,36 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691"
+          }
+        ],
+        "/AwsFileUploadStack/CleanupLambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CleanupLambdaServiceRole3E2B184D"
+          }
+        ],
+        "/AwsFileUploadStack/CleanupLambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CleanupLambdaServiceRoleDefaultPolicy30F00092"
+          }
+        ],
+        "/AwsFileUploadStack/CleanupLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CleanupLambda82DB42D3"
+          }
+        ],
+        "/AwsFileUploadStack/ScheduleCleanupRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ScheduleCleanupRule0B345C0C"
+          }
+        ],
+        "/AwsFileUploadStack/ScheduleCleanupRule/AllowEventRuleAwsFileUploadStackCleanupLambdaF32028A4": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ScheduleCleanupRuleAllowEventRuleAwsFileUploadStackCleanupLambdaF32028A4EE845FE6"
           }
         ],
         "/AwsFileUploadStack/CDKMetadata/Default": [
