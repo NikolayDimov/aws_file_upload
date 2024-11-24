@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/604e5cb12e79affd614fdbe74945e81d169f535667cf2a2bf3b152dccfa476b7.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/ae798e1b01a42498df32d87d9c53743301c06217f680ea3ca1b86166c96f18da.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -38,6 +38,18 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "FileUploadBucketAwsExamB432E057"
+          }
+        ],
+        "/AwsFileUploadStack/FileUploadBucketAwsExam/Notifications/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FileUploadBucketAwsExamNotificationsDA5F2B8C"
+          }
+        ],
+        "/AwsFileUploadStack/FileUploadBucketAwsExam/AllowBucketNotificationsToAwsFileUploadStackProcessFileLambdaDBF9F7E0": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FileUploadBucketAwsExamAllowBucketNotificationsToAwsFileUploadStackProcessFileLambdaDBF9F7E0D196BE4B"
           }
         ],
         "/AwsFileUploadStack/expirationTable/Resource": [
@@ -62,6 +74,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ProcessFileLambdaC1DE8C82"
+          }
+        ],
+        "/AwsFileUploadStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+          }
+        ],
+        "/AwsFileUploadStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36"
+          }
+        ],
+        "/AwsFileUploadStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691"
           }
         ],
         "/AwsFileUploadStack/CDKMetadata/Default": [

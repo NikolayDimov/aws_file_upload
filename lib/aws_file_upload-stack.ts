@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { AttributeType, BillingMode, StreamViewType, Table } from "aws-cdk-lib/aws-dynamodb";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
+import * as s3Notifications from "aws-cdk-lib/aws-s3-notifications";
 
 export class AwsFileUploadStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -42,5 +43,7 @@ export class AwsFileUploadStack extends cdk.Stack {
         // Grant Permissions
         bucket.grantReadWrite(processFileLambda);
         expirationTable.grantReadWriteData(processFileLambda);
+
+        bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3Notifications.LambdaDestination(processFileLambda));
     }
 }
