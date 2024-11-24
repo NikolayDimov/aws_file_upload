@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/612cb303fb8e77856635fcdb6c4352048c27efc7824ca39ed9ac1742b2d6fba8.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/2246e290bc23035392c00dedbf4c75f1dd8d1b89ccbefc1f224914e11662ea6c.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -38,6 +38,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "FileUploadBucketAwsExamB432E057"
+          }
+        ],
+        "/AwsFileUploadStack/FileMetadataTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FileMetadataTableE69EBE66"
           }
         ],
         "/AwsFileUploadStack/CDKMetadata/Default": [

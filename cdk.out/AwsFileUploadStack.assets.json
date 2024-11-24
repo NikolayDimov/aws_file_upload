@@ -1,7 +1,7 @@
 {
   "version": "38.0.1",
   "files": {
-    "612cb303fb8e77856635fcdb6c4352048c27efc7824ca39ed9ac1742b2d6fba8": {
+    "2246e290bc23035392c00dedbf4c75f1dd8d1b89ccbefc1f224914e11662ea6c": {
       "source": {
         "path": "AwsFileUploadStack.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "612cb303fb8e77856635fcdb6c4352048c27efc7824ca39ed9ac1742b2d6fba8.json",
+          "objectKey": "2246e290bc23035392c00dedbf4c75f1dd8d1b89ccbefc1f224914e11662ea6c.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

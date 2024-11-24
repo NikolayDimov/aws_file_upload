@@ -30,6 +30,65 @@
               "version": "2.170.0"
             }
           },
+          "FileMetadataTable": {
+            "id": "FileMetadataTable",
+            "path": "AwsFileUploadStack/FileMetadataTable",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsFileUploadStack/FileMetadataTable/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "fileId",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "uploadDate",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "keySchema": [
+                      {
+                        "attributeName": "fileId",
+                        "keyType": "HASH"
+                      },
+                      {
+                        "attributeName": "uploadDate",
+                        "keyType": "RANGE"
+                      }
+                    ],
+                    "streamSpecification": {
+                      "streamViewType": "NEW_AND_OLD_IMAGES"
+                    },
+                    "timeToLiveSpecification": {
+                      "attributeName": "ttl",
+                      "enabled": true
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.170.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "AwsFileUploadStack/FileMetadataTable/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.170.0"
+            }
+          },
           "CDKMetadata": {
             "id": "CDKMetadata",
             "path": "AwsFileUploadStack/CDKMetadata",

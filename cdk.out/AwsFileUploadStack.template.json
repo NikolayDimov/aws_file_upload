@@ -8,10 +8,48 @@
     "aws:cdk:path": "AwsFileUploadStack/FileUploadBucketAwsExam/Resource"
    }
   },
+  "FileMetadataTableE69EBE66": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "fileId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "uploadDate",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "fileId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "uploadDate",
+      "KeyType": "RANGE"
+     }
+    ],
+    "StreamSpecification": {
+     "StreamViewType": "NEW_AND_OLD_IMAGES"
+    },
+    "TimeToLiveSpecification": {
+     "AttributeName": "ttl",
+     "Enabled": true
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/FileMetadataTable/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yXGQQ6DIBAAwLd4hy3Fg+m1/sA+wFDYJiu6JC7owfj3hnCasfAcDJjOnaJ9iHqlL1yf7HxU7pRZerjexUfMavxx2107oaSye6wfEwfKlPhWnALCIo/DWniB6RYh0nvhTBvC1PwDY9brGHMAAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/03JOw7CMBBF0bWktwdjCkRLdhDSI/+QJk7GUsYmQpb3jkgaqnf0robzVYHqzMbS+ShntFAf2bgozMbPyheo9+JiyKJ/0aEm/IfMkryFOho7h1/a0ZoYAqeyuv37d5/IY8ZETVDyASY+vbWGG6huYkS5Fsq4BBiO/QKjEuN2mAAAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "AwsFileUploadStack/CDKMetadata/Default"
