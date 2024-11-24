@@ -15,7 +15,7 @@ export const cleanupFunction = async (event: any) => {
         new ScanCommand({
             TableName: TABLE_NAME,
             FilterExpression: "expirationTime <= :now",
-            ExpressionAttributeValues: { ":now": { N: now.toString() } }, // Wrap 'now' in the correct AttributeValue format
+            ExpressionAttributeValues: { ":now": { N: now.toString() } },
         })
     );
 

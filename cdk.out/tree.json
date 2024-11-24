@@ -137,6 +137,30 @@
               "version": "2.170.0"
             }
           },
+          "ErrorTopic": {
+            "id": "ErrorTopic",
+            "path": "AwsFileUploadStack/ErrorTopic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsFileUploadStack/ErrorTopic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {
+                    "topicName": "ErrorTopicAws"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.170.0"
+            }
+          },
           "ProcessFileLambda": {
             "id": "ProcessFileLambda",
             "path": "AwsFileUploadStack/ProcessFileLambda",
@@ -268,6 +292,13 @@
                                       "Ref": "AWS::NoValue"
                                     }
                                   ]
+                                },
+                                {
+                                  "Action": "sns:Publish",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Ref": "ErrorTopicA0904A23"
+                                  }
                                 }
                               ],
                               "Version": "2012-10-17"
@@ -333,7 +364,7 @@
                       "s3Bucket": {
                         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                       },
-                      "s3Key": "c95ba8997a41fe41cebe89bfaff7ae89484124fc0c90a30760bc8d00e51fc523.zip"
+                      "s3Key": "df73714c3079bbe56f9bf5e6ad1f2b5cb16738829d71a49e4914aa4653d5e303.zip"
                     },
                     "environment": {
                       "variables": {
@@ -343,7 +374,9 @@
                         "BUCKET_NAME": {
                           "Ref": "FileUploadBucketAwsExamB432E057"
                         },
-                        "TOPIC_ARN": "arn:aws:sns:region:account-id:topic-name"
+                        "TOPIC_ARN": {
+                          "Ref": "ErrorTopicA0904A23"
+                        }
                       }
                     },
                     "handler": "index.processFileLambda",
@@ -612,6 +645,13 @@
                                       "Ref": "AWS::NoValue"
                                     }
                                   ]
+                                },
+                                {
+                                  "Action": "sns:Publish",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Ref": "ErrorTopicA0904A23"
+                                  }
                                 }
                               ],
                               "Version": "2012-10-17"
@@ -677,7 +717,7 @@
                       "s3Bucket": {
                         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                       },
-                      "s3Key": "a1d5689cc514ac79cc3de6a9421fa76f335e64548ef66d6bf80e51ed9be1dafa.zip"
+                      "s3Key": "afb00affa7d7424197d8826b01826057ef4fe390e605bf100861d012fa07a02f.zip"
                     },
                     "environment": {
                       "variables": {
@@ -770,6 +810,334 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_events.Rule",
+              "version": "2.170.0"
+            }
+          },
+          "ProcessorApi": {
+            "id": "ProcessorApi",
+            "path": "AwsFileUploadStack/ProcessorApi",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsFileUploadStack/ProcessorApi/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "ProcessorApi"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                  "version": "2.170.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "AwsFileUploadStack/ProcessorApi/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AwsFileUploadStack/ProcessorApi/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "description": "Automatically created by the RestApi construct",
+                        "restApiId": {
+                          "Ref": "ProcessorApiEE88D53F"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
+                  "version": "2.170.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "AwsFileUploadStack/ProcessorApi/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AwsFileUploadStack/ProcessorApi/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "deploymentId": {
+                          "Ref": "ProcessorApiDeploymentE2352F46e6bcd62bb092ebb31595ec99c3d3ed23"
+                        },
+                        "restApiId": {
+                          "Ref": "ProcessorApiEE88D53F"
+                        },
+                        "stageName": "prod"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Stage",
+                  "version": "2.170.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "AwsFileUploadStack/ProcessorApi/Endpoint",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.170.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "AwsFileUploadStack/ProcessorApi/Default",
+                "children": {
+                  "processJSON": {
+                    "id": "processJSON",
+                    "path": "AwsFileUploadStack/ProcessorApi/Default/processJSON",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "ProcessorApiEE88D53F",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "processJSON",
+                            "restApiId": {
+                              "Ref": "ProcessorApiEE88D53F"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.170.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/POST",
+                        "children": {
+                          "ApiPermission.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON": {
+                            "id": "ApiPermission.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON",
+                            "path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/POST/ApiPermission.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "ProcessFileLambdaC1DE8C82",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "ProcessorApiEE88D53F"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "ProcessorApiDeploymentStageprod67007E1E"
+                                      },
+                                      "/POST/processJSON"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.170.0"
+                            }
+                          },
+                          "ApiPermission.Test.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON": {
+                            "id": "ApiPermission.Test.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON",
+                            "path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/POST/ApiPermission.Test.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "ProcessFileLambdaC1DE8C82",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "ProcessorApiEE88D53F"
+                                      },
+                                      "/test-invoke-stage/POST/processJSON"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.170.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "authorizationType": "NONE",
+                                "httpMethod": "POST",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "ProcessFileLambdaC1DE8C82",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                },
+                                "resourceId": {
+                                  "Ref": "ProcessorApiprocessJSONEB11BF11"
+                                },
+                                "restApiId": {
+                                  "Ref": "ProcessorApiEE88D53F"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.170.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.170.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.170.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.RestApi",
+              "version": "2.170.0"
+            }
+          },
+          "ErrorSubscription": {
+            "id": "ErrorSubscription",
+            "path": "AwsFileUploadStack/ErrorSubscription",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsFileUploadStack/ErrorSubscription/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                  "aws:cdk:cloudformation:props": {
+                    "endpoint": "atclient115@gmail.com",
+                    "protocol": "email",
+                    "topicArn": {
+                      "Ref": "ErrorTopicA0904A23"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
+                  "version": "2.170.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Subscription",
+              "version": "2.170.0"
+            }
+          },
+          "RESTApiEndpoint": {
+            "id": "RESTApiEndpoint",
+            "path": "AwsFileUploadStack/RESTApiEndpoint",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.170.0"
+            }
+          },
+          "TopicArn": {
+            "id": "TopicArn",
+            "path": "AwsFileUploadStack/TopicArn",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
               "version": "2.170.0"
             }
           },

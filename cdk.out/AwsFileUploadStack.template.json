@@ -108,6 +108,15 @@
     "aws:cdk:path": "AwsFileUploadStack/expirationTable/Resource"
    }
   },
+  "ErrorTopicA0904A23": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "TopicName": "ErrorTopicAws"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ErrorTopic/Resource"
+   }
+  },
   "ProcessFileLambdaServiceRole13746D9D": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -211,6 +220,13 @@
          "Ref": "AWS::NoValue"
         }
        ]
+      },
+      {
+       "Action": "sns:Publish",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "ErrorTopicA0904A23"
+       }
       }
      ],
      "Version": "2012-10-17"
@@ -233,7 +249,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "c95ba8997a41fe41cebe89bfaff7ae89484124fc0c90a30760bc8d00e51fc523.zip"
+     "S3Key": "df73714c3079bbe56f9bf5e6ad1f2b5cb16738829d71a49e4914aa4653d5e303.zip"
     },
     "Environment": {
      "Variables": {
@@ -243,7 +259,9 @@
       "BUCKET_NAME": {
        "Ref": "FileUploadBucketAwsExamB432E057"
       },
-      "TOPIC_ARN": "arn:aws:sns:region:account-id:topic-name"
+      "TOPIC_ARN": {
+       "Ref": "ErrorTopicA0904A23"
+      }
      }
     },
     "Handler": "index.processFileLambda",
@@ -261,7 +279,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "AwsFileUploadStack/ProcessFileLambda/Resource",
-    "aws:asset:path": "asset.c95ba8997a41fe41cebe89bfaff7ae89484124fc0c90a30760bc8d00e51fc523",
+    "aws:asset:path": "asset.df73714c3079bbe56f9bf5e6ad1f2b5cb16738829d71a49e4914aa4653d5e303",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -452,6 +470,13 @@
          "Ref": "AWS::NoValue"
         }
        ]
+      },
+      {
+       "Action": "sns:Publish",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "ErrorTopicA0904A23"
+       }
       }
      ],
      "Version": "2012-10-17"
@@ -474,7 +499,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "a1d5689cc514ac79cc3de6a9421fa76f335e64548ef66d6bf80e51ed9be1dafa.zip"
+     "S3Key": "afb00affa7d7424197d8826b01826057ef4fe390e605bf100861d012fa07a02f.zip"
     },
     "Environment": {
      "Variables": {
@@ -501,7 +526,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "AwsFileUploadStack/CleanupLambda/Resource",
-    "aws:asset:path": "asset.a1d5689cc514ac79cc3de6a9421fa76f335e64548ef66d6bf80e51ed9be1dafa",
+    "aws:asset:path": "asset.afb00affa7d7424197d8826b01826057ef4fe390e605bf100861d012fa07a02f",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }
@@ -549,15 +574,260 @@
     "aws:cdk:path": "AwsFileUploadStack/ScheduleCleanupRule/AllowEventRuleAwsFileUploadStackCleanupLambdaF32028A4"
    }
   },
+  "ProcessorApiEE88D53F": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "ProcessorApi"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessorApi/Resource"
+   }
+  },
+  "ProcessorApiDeploymentE2352F46e6bcd62bb092ebb31595ec99c3d3ed23": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "ProcessorApiEE88D53F"
+    }
+   },
+   "DependsOn": [
+    "ProcessorApiprocessJSONPOST621223AA",
+    "ProcessorApiprocessJSONEB11BF11"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessorApi/Deployment/Resource"
+   }
+  },
+  "ProcessorApiDeploymentStageprod67007E1E": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "ProcessorApiDeploymentE2352F46e6bcd62bb092ebb31595ec99c3d3ed23"
+    },
+    "RestApiId": {
+     "Ref": "ProcessorApiEE88D53F"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessorApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "ProcessorApiprocessJSONEB11BF11": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ProcessorApiEE88D53F",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "processJSON",
+    "RestApiId": {
+     "Ref": "ProcessorApiEE88D53F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/Resource"
+   }
+  },
+  "ProcessorApiprocessJSONPOSTApiPermissionAwsFileUploadStackProcessorApi882DE8D6POSTprocessJSON359BF6DA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ProcessFileLambdaC1DE8C82",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ProcessorApiEE88D53F"
+       },
+       "/",
+       {
+        "Ref": "ProcessorApiDeploymentStageprod67007E1E"
+       },
+       "/POST/processJSON"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/POST/ApiPermission.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON"
+   }
+  },
+  "ProcessorApiprocessJSONPOSTApiPermissionTestAwsFileUploadStackProcessorApi882DE8D6POSTprocessJSON4BED109F": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "ProcessFileLambdaC1DE8C82",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ProcessorApiEE88D53F"
+       },
+       "/test-invoke-stage/POST/processJSON"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/POST/ApiPermission.Test.AwsFileUploadStackProcessorApi882DE8D6.POST..processJSON"
+   }
+  },
+  "ProcessorApiprocessJSONPOST621223AA": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "ProcessFileLambdaC1DE8C82",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ProcessorApiprocessJSONEB11BF11"
+    },
+    "RestApiId": {
+     "Ref": "ProcessorApiEE88D53F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ProcessorApi/Default/processJSON/POST/Resource"
+   }
+  },
+  "ErrorSubscription9DAFDAFE": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Endpoint": "atclient115@gmail.com",
+    "Protocol": "email",
+    "TopicArn": {
+     "Ref": "ErrorTopicA0904A23"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AwsFileUploadStack/ErrorSubscription/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OTWvDMAxAf0vvjpalh7LjGthxlHT3oNhqUT5kiOyWYvLfi5N2p/eE9EAVfB5KKHd418K6oRi5g3QOaAeDd22T7iEdox0omPoiL9twRKXFjDh1DiHVFznRPLEqe8m3P1FsYC+LcQ/BybsO0h92I+XlKu+4Fe+oV/hd8e4M4wSp8Vuw8uRHto88brYY3beoSkHhO8PQjSQopCa+sjjSsqxG6uNsyfzLWpwDXlmu+aL24nj7OD8EvX7cqgq+oNz1ylzMUQJPBM3GJ2oXZjc6AQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WQQW/CMAyFfwv34DE4TDsC027bUOGO3NQwlzap6gRURf3vU5KC2Ol9z05s6y3h9W0BixneZK6ry7zhEsLeob4ovMkxyArCxusLObU9mYmybFBoVA22ZYUQtiezo75lEbYmvv30Rju2ZlTVYLC1VQnhgGVDsZlgVGIEwsF2rFMxwd6Xonvu3DTn2d/XHY2tqBb4TnLfpBhbCIXNK5LubMN6iDbTqGR1RBFyAusoiq5knEAo/PTNx8Ow4zM6uuEAoSBx645Tc8IP6ho7tGRSKk9u7/CcxmQoSKzvNcWoHmYalPmL3K+tYinTOP5rPyAdG4eyOccXP951Pm3fWlNxDiemArW8XJdLeIfFrBbmee+N45agyPoHFzlTgvEBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "AwsFileUploadStack/CDKMetadata/Default"
    },
    "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "ProcessorApiEndpoint204FEF6F": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ProcessorApiEE88D53F"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ProcessorApiDeploymentStageprod67007E1E"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "RESTApiEndpoint": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ProcessorApiEE88D53F"
+      },
+      ".execute-api.eu-center-1.amazonaws.com/prod/processJSON"
+     ]
+    ]
+   }
+  },
+  "TopicArn": {
+   "Value": {
+    "Ref": "ErrorTopicA0904A23"
+   }
   }
  },
  "Conditions": {
